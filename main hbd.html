@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>For You</title>
+  <meta name="description" content="Happy birthday" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image" href="il.png" />
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Libraries -->
+  <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
+
+    :root { --fg: #fff; --bg: #000; }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Itim", cursive;
+      text-shadow: 0 2px 2px rgba(0,0,0,.5);
+    }
+
+    /* Background image layer */
+    #bodyblur { position: fixed; inset: 0; opacity: .5; }
+    #wallpaper { width: 100%; height: 100%; object-fit: cover; animation: zoom 10s infinite; }
+    @keyframes zoom { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+    /* Overlay (tap to start) */
+    .overlay { position: fixed; inset: 0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; z-index:100; }
+    .loading-message { font-size:14px; margin-bottom:20px; }
+    .blocklove { display:none; flex-direction:column; align-items:center; gap:10px; }
+    .lovein { background:#fff; color:#da1e82; border-radius:50%; width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; box-shadow:0 4px 18px rgba(255,255,255,.15); }
+    #ket { margin:0; opacity:.9; }
+
+    /* Swiper */
+    .swiper { width: 100%; height: 100%; }
+    .swiper-slide { text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 0 16px; margin-top:-80px; }
+    .swiper-pagination { margin-bottom: 18vh; }
+    .swiper-pagination-bullet-active { background-color:#fff !important; }
+
+    /* Stickers (GIF circles) */
+    .stiker { display:flex; align-items:center; justify-content:center; width: 96px; height:96px; margin:0 auto 18px; border-radius:50%; padding:10px; background: rgba(255,255,255,.7); box-shadow:0 4px 30px rgba(255,255,255,.25); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); transition:.75s ease; }
+    .stiker img { width: 86px; height: 86px; border-radius:50%; object-fit:cover; }
+
+    /* Text block with its own scroll (so Swiper won't fight it) */
+    .blocktext { position:relative; width:100%; max-width:680px; height:58vh; margin-top: 24px; overflow:auto; -webkit-overflow-scrolling:touch; overscroll-behavior: contain; touch-action: pan-y; }
+    .blocktext p { text-align:left; line-height:1.6; font-size:16px; margin:0 12px 24px; }
+
+    /* Enter animations used by JS */
+    .scale0 { opacity:0; transform:scale(.9); }
+    .scale1 { opacity:1; transform:scale(1); transition: all .6s ease; }
+
+    /* Heart/flower svg baseline (kept if you want) */
+    svg.line { fill:none; stroke:#fff; stroke-width:2; }
+
+    /* Falling flowers */
+    .flower-icon { position: fixed; top:-10vh; z-index: 101; animation: flowerFall linear forwards; pointer-events:none; }
+    @keyframes flowerFall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity:1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity:.75; }
+    }
+
+    footer { position: fixed; bottom:0; left:0; right:0; text-align:center; padding: 8px 0; }
+    footer a { color: rgba(255,255,255,.875); text-decoration:none; }
+
+    @media (max-width:768px) {
+      .swiper-slide { margin-top:-60px; }
+      .blocktext { height: 60vh; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background music -->
+  <audio src="mhbd.mp3" id="linkmp3"></audio>
+
+  <!-- Tap overlay -->
+  <div class="overlay">
+    <div class="loading-message">Hai kamu!<br/>Tunggu dulu ya..</div>
+    <div id="loveIn" class="blocklove">
+      <button class="lovein" aria-label="Tap to start">❤️</button>
+      <p id="ket">Tap Here</p>
+    </div>
+  </div>
+
+  <!-- Background image layer -->
+  <div id="bodyblur"><img src="bg.jpg" id="wallpaper" alt="background" /></div>
+
+  <!-- Slides -->
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+
+      <!-- Slide 1 -->
+      <div class="swiper-slide">
+        <div id="stiker1" class="stiker scale0"><img src="glg.gif" alt="sticker" /></div>
+        <h1 id="teks1" class="scale0" style="font-size:20px; margin:0"> Hey Hassan<br/>
+    I made something just for you<br />⇒ ⇒ ⇒</h1>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="swiper-slide">
+        <div id="stiker2" class="stiker scale0"><img src="emh.gif" alt="sticker" /></div>
+        <h1 id="teks2" class="scale0" style="font-size:19px; margin:0">Guess whose birthday is today 🫠<br/><br/><span style="font-size:16px; font-weight:400">swipe & read to the end!</span><br/><br/>⇒ ⇒ ⇒</h1>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="swiper-slide">
+        <div id="stiker3" class="stiker scale0"><img src="kdp2.gif" alt="sticker" /></div>
+        <div id="scroll-container" class="blocktext swiper-no-swiping">
+          <p id="teks3">
+            <b><i>Happy Birthday Hassan 💐</i></b><br/><br/>
+            Happy Birthday to the most caring and kind person I know. Honestly,
+            I can’t imagine a single day without talking to you. Without you,
+            I feel like I’m nothing, because you’ve become such an important
+            part of my life. I trust you blindly, and you’ve shown me what real friendship means.
+ Thank you for being my friend, thank you for always making me happy,
+            and for being there every time I need someone. I’m really sorry if I ever
+            do or say something wrong I never want to hurt you.
+
+            I just wish one day we can meet in real life, because that would mean so much to me.
+            You’re truly special, and I’m lucky to have you in my life. Once again, Happy Birthday!
+            I hope your day is full of smiles and happiness, just like the happiness you always give me. 🥳💐🫶✨
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    const audio = document.getElementById('linkmp3');
+
+    // Show start button once page is ready
+    window.addEventListener('load', () => {
+      document.querySelector('.loading-message').style.display = 'none';
+      document.querySelector('.blocklove').style.display = 'flex';
+    });
+
+    // Start: play music, hide overlay, show first slide content
+    document.getElementById('loveIn').addEventListener('click', () => {
+      audio.play().catch(()=>{});
+      document.querySelector('.overlay').style.display = 'none';
+      document.getElementById('stiker1').classList.add('scale1');
+      document.getElementById('teks1').classList.add('scale1');
+    });
+
+    // Swiper setup (allow inner scroll container to work smoothly)
+    const swiper = new Swiper('.mySwiper', {
+      direction: 'horizontal',
+      pagination: { el: '.swiper-pagination' },
+      touchStartPreventDefault: false,   // allow touch to start on inner scroll area
+      passiveListeners: false
+    });
+
+    // Progressive reveals per slide
+    let current = 1;
+    swiper.on('slideChange', () => {
+      current++;
+      const teks = document.getElementById('teks' + current);
+      const stiker = document.getElementById('stiker' + current);
+      if (teks) teks.classList.add('scale1');
+      if (stiker) stiker.classList.add('scale1');
+      if (current === 3) startTyping();
+    });
+
+    // Typewriter then start flowers
+    const teks3 = document.getElementById('teks3');
+    const originalText = teks3.innerHTML; teks3.innerHTML = '';
+
+    function startTyping() {
+      new TypeIt('#teks3', {
+        strings: [originalText],
+        startDelay: 250,
+        speed: 50,
+        cursor: true,
+        afterComplete: () => {
+          teks3.innerHTML = originalText; // finalize plain HTML
+          setInterval(spawnFlower, 350);
+        }
+      }).go();
+    }
+
+    // Falling flowers (emoji). Make sure not to leak too many nodes.
+    function spawnFlower() {
+      const el = document.createElement('div');
+      el.className = 'flower-icon';
+      el.textContent = ['🌸','🌺','🌼','🌹'][Math.floor(Math.random()*4)];
+      el.style.left = (Math.random()*96) + 'vw';
+      el.style.fontSize = (Math.random()*18 + 18) + 'px';
+      el.style.animationDuration = (Math.random()*3 + 2) + 's';
+      document.body.appendChild(el);
+      // cleanup after animation
+      const ttl = parseFloat(el.style.animationDuration) * 1000 + 200;
+      setTimeout(()=> el.remove(), ttl);
+    }
+  </script>
+
+  <footer>
+    <a href="#"></a>
+  </footer>
+</body>
+</html>
